@@ -1,0 +1,53 @@
+version: '3'
+services:
+
+  php-apache:
+    build:
+      context: .
+    container_name: php-apache
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ${DOCUMENT_ROOT}:/var/www/html
+    links:
+      - mysql:mysql
+    environment:
+      XDEBUG_CONFIG: remote_host=${REMOTE_HOST_XDEBUG}
+
+  mysql:
+    image: mysql:5.7.19
+    container_name: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+      - mysql-data:/var/lib/mysql
+    command:
+      - --max_allowed_packet=1032505856
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+      - --skip-character-set-client-handshake
+    environment:
+      TZ: "${TIMEZONE}"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - mysql:mysql
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+
+volumes:
+  mysql-data:
