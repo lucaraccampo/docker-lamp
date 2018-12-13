@@ -1,22 +1,8 @@
 version: '3'
 services:
 
-  php-apache:
-    build:
-      context: .
-    container_name: php-apache
-    restart: always
-    ports:
-      - 80:80
-    volumes:
-      - ${DOCUMENT_ROOT}:/var/www/html
-    links:
-      - 'mysql'
-    environment:
-      XDEBUG_CONFIG: remote_host=${REMOTE_HOST_XDEBUG}
-
   mysql:
-    image: mysql:5.7.19
+    image: mysql:5.7
     container_name: mysql
     restart: always
     ports:
@@ -37,6 +23,20 @@ services:
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
 
+  php-apache:
+    build:
+      context: .
+    container_name: php-apache
+    restart: always
+    ports:
+    - 80:80
+    volumes:
+    - ${DOCUMENT_ROOT}:/var/www/html
+    links:
+    - 'mysql'
+    environment:
+      XDEBUG_CONFIG: remote_host=${REMOTE_HOST_XDEBUG}
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -47,7 +47,7 @@ services:
       - 8080:80
     environment:
       PMA_ARBITRARY: 1
-      PMA_HOST: ${PMA_HOST}
+      PMA_HOST: mysql
       PMA_PORT: ${PMA_PORT}
 
 volumes:

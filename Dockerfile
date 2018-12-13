@@ -1,4 +1,4 @@
-FROM php:7.1.17-apache
+FROM php:7.1-apache
 MAINTAINER luca raccampo
 
 # Install some generic command line tool
