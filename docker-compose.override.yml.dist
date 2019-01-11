@@ -1,0 +1,15 @@
+version: '3'
+services:
+
+  mysql:
+    ports:
+     - 3306:3306
+
+  php-apache:
+    ports:
+     - 80:80
+
+  phpmyadmin:
+    ports:
+     - 8080:80
+

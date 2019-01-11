@@ -2,3 +2,5 @@
 .DS_STORE
 .env
 mysql-init/*.sql
+init-db/*.sql
+docker-compose.override.yml
