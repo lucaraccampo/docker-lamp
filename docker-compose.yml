@@ -3,7 +3,7 @@ services:
 
   mysql:
     image: mysql:5.7
-    container_name: mysql
+    container_name: ${COMPOSE_PROJECT_NAME}-mysql
     restart: always
     ports:
       - 3306:3306
@@ -26,7 +26,7 @@ services:
   php-apache:
     build:
       context: .
-    container_name: php-apache
+    container_name: ${COMPOSE_PROJECT_NAME}-php-apache
     restart: always
     ports:
     - 80:80
@@ -39,7 +39,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: ${COMPOSE_PROJECT_NAME}-phpmyadmin
     links:
     - 'mysql'
     restart: always
@@ -47,7 +47,7 @@ services:
       - 8080:80
     environment:
       PMA_ARBITRARY: 1
-      PMA_HOST: mysql
+      PMA_HOST: ${COMPOSE_PROJECT_NAME}-mysql
       PMA_PORT: ${PMA_PORT}
 
 volumes:
