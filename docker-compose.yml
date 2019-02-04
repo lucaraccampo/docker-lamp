@@ -5,8 +5,6 @@ services:
     image: mysql:5.7
     container_name: ${COMPOSE_PROJECT_NAME}-mysql
     restart: always
-    ports:
-      - 3306:3306
     volumes:
       - ./init-db:/docker-entrypoint-initdb.d
       - mysql-data:/var/lib/mysql
@@ -28,8 +26,6 @@ services:
       context: .
     container_name: ${COMPOSE_PROJECT_NAME}-php-apache
     restart: always
-    ports:
-    - 80:80
     volumes:
     - ${DOCUMENT_ROOT}:/var/www/html
     links:
@@ -43,8 +39,6 @@ services:
     links:
     - 'mysql'
     restart: always
-    ports:
-      - 8080:80
     environment:
       PMA_ARBITRARY: 1
       PMA_HOST: ${COMPOSE_PROJECT_NAME}-mysql
