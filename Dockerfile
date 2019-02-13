@@ -1,29 +1,79 @@
 FROM php:7.1-apache
 MAINTAINER luca raccampo
 
+RUN a2enmod rewrite
+
 # Install some generic command line tool
 RUN apt-get update -y \
     && apt-get install -y nano \
     && apt-get install -y locate \
     && apt-get install -y net-tools \
     && apt-get install git -y -q \
-    && apt-get install -y curl
+    && apt-get install -y curl \
+    && apt-get install -y mysql-client
 
 RUN apt-get install -y sendmail
 
 # Install some php extensions
-RUN apt-get install -y \
-        zlib1g-dev \
-        libicu-dev \
+RUN mkdir -p /usr/share/man/man1 /usr/share/man/man7 \
+    && apt-get install -y \
+        bzip2 \
+        exiftool \
         g++ \
-        libbz2-dev \
-        libpng-dev \
         gnupg \
-    && apt-get clean -y
-RUN docker-php-ext-install pdo pdo_mysql mysqli bcmath bz2 calendar exif gettext intl sockets
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install gd
+        git-core \
+        imagemagick \
+        libbz2-dev \
+        libc-client2007e-dev \
+        libjpeg-dev \
+        libkrb5-dev \
+        libldap2-dev \
+        libmagickwand-dev \
+        libmemcached-dev \
+        libpng-dev \
+        libpq-dev \
+        libxml2-dev \
+        libicu-dev \
+        mysql-client \
+        postgresql-client-9.6 \
+        pv \
+        ssh \
+        unzip \
+        wget \
+        xfonts-base \
+        xfonts-75dpi \
+        zlib1g-dev \
+    && pecl install apcu \
+    && pecl install imagick \
+    && pecl install memcached \
+    && pecl install oauth-2.0.2 \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr \
+    && docker-php-ext-configure imap --with-imap-ssl --with-kerberos \
+    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-enable apcu \
+    && docker-php-ext-enable imagick \
+    && docker-php-ext-enable memcached \
+    && docker-php-ext-enable oauth \
+    && docker-php-ext-install \
+        bcmath \
+        bz2 \
+        calendar \
+        exif \
+        gd \
+        imap \
+        ldap \
+        mbstring \
+        mysqli \
+        opcache \
+        pdo \
+        pdo_mysql \
+        pdo_pgsql \
+        soap \
+        zip \
+        intl \
+        gettext \
+        pcntl \
+        sockets
 
 RUN a2enmod rewrite
 
@@ -65,6 +115,11 @@ RUN drush core-status
 RUN nodejs --version
 RUN npm --version
 
+RUN apt-get -y clean \
+  && apt-get -y autoclean \
+  && apt-get -y autoremove \
+  && rm -rf /var/lib/apt/lists/* && rm -rf && rm -rf /var/lib/cache/* && rm -rf /var/lib/log/* && rm -rf /tmp/*
 
+RUN echo 'alias ll="ls -al"' >> ~/.bashrc
 
 
