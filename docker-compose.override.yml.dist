@@ -6,8 +6,11 @@ services:
      - 3306:3306
 
   php-apache:
-    ports:
-     - 80:80
+    #expose:
+    #    - "80"
+    #ports:
+     #- 80:80
+
 
   phpmyadmin:
     ports:

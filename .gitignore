@@ -1,6 +1,8 @@
 .idea
 .DS_STORE
 .env
-mysql-init/*.sql
 init-db/*.sql
 docker-compose.override.yml
+config/php/php.ini
+config/vhost/default.conf
+images/*/Dockerfile

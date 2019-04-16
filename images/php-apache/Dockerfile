@@ -75,8 +75,6 @@ RUN mkdir -p /usr/share/man/man1 /usr/share/man/man7 \
         pcntl \
         sockets
 
-RUN a2enmod rewrite
-
 ## Install xdebug extension
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
@@ -101,6 +99,10 @@ RUN curl -sS https://getcomposer.org/installer | php && \
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
   apt-get install -y nodejs
 
+# Print final report
+RUN nodejs --version
+RUN npm --version
+
 # Set the Drush version.
 ENV DRUSH_VERSION 8.1.16
 
@@ -111,9 +113,11 @@ RUN curl -fsSL -o /usr/local/bin/drush "https://github.com/drush-ops/drush/relea
 # Test your install.
 RUN drush core-status
 
-# Print final report
-RUN nodejs --version
-RUN npm --version
+# Install Drupal Console Launcher
+RUN curl https://drupalconsole.com/installer -L -o drupal.phar && \
+    mv drupal.phar /usr/local/bin/drupal && \
+    chmod +x /usr/local/bin/drupal
+
 
 RUN apt-get -y clean \
   && apt-get -y autoclean \
