@@ -23,11 +23,13 @@ services:
 
   php-apache:
     build:
-      context: .
+      context: ./images/php-apache
     container_name: ${COMPOSE_PROJECT_NAME}-php-apache
     restart: always
     volumes:
-    - ${DOCUMENT_ROOT}:/var/www/html
+      - ${DOCUMENT_ROOT}:/var/www/html
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/vhost/default.conf:/etc/apache2/sites-available/000-default.conf
     links:
     - 'mysql'
     environment:
