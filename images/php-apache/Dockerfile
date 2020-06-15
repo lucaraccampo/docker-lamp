@@ -103,15 +103,10 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
 RUN nodejs --version
 RUN npm --version
 
-# Set the Drush version.
-ENV DRUSH_VERSION 8.1.16
-
-# Install Drush 8 with the phar file.
-RUN curl -fsSL -o /usr/local/bin/drush "https://github.com/drush-ops/drush/releases/download/$DRUSH_VERSION/drush.phar" && \
-  chmod +x /usr/local/bin/drush
-
-# Test your install.
-RUN drush core-status
+# Install Drush Launcher
+RUN curl https://github.com/drush-ops/drush-launcher/releases/download/0.6.0/drush.phar -L -o drush.phar && \
+    mv drush.phar /usr/local/bin/drush && \
+    chmod +x /usr/local/bin/drush
 
 # Install Drupal Console Launcher
 RUN curl https://drupalconsole.com/installer -L -o drupal.phar && \

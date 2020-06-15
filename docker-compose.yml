@@ -21,6 +21,14 @@ services:
       MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
 
+  smtp:
+    image: namshi/smtp
+    container_name: ${COMPOSE_PROJECT_NAME}-smtp
+    restart: always
+    environment:
+      GMAIL_USER: "${GMAIL_USER}"
+      GMAIL_PASSWORD: "${GMAIL_PASSWORD}"
+
   php-apache:
     build:
       context: ./images/php-apache
@@ -28,8 +36,8 @@ services:
     restart: always
     volumes:
       - ${DOCUMENT_ROOT}:/var/www/html
-      - ./config/php/php.ini:/usr/local/etc/php/php.ini
-      - ./config/vhost/default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini:cached
+      - ./config/vhost/default.conf:/etc/apache2/sites-available/000-default.conf:cached
     links:
     - 'mysql'
     environment:
